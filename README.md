@@ -82,10 +82,11 @@ Power BI dashboards provide:
 mta-bus-ridership-analytics/
 │
 ├── README.md
+│
 ├── sql/
 │   ├── raw_tables.sql
 │   ├── staging.sql
-│   ├── mart.sql
+│   └── mart.sql
 │
 ├── data/
 │   └── sample.csv
@@ -93,8 +94,8 @@ mta-bus-ridership-analytics/
 ├── powerbi/
 │   └── dashboard.pbix
 │
-└── notebooks/
-    └── pipeline.ipynb
+├── notebooks/
+│   └── pipeline.ipynb
 
 
 ---
