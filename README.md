@@ -77,28 +77,6 @@ Power BI dashboards provide:
 
 ---
 
-## 📂 Project Structure
-
-mta-bus-ridership-analytics/
-│
-├── README.md
-│
-├── sql/
-│   ├── raw_tables.sql
-│   ├── staging.sql
-│   └── mart.sql
-│
-├── data/
-│   └── sample.csv
-│
-├── powerbi/
-│   └── dashboard.pbix
-│
-├── notebooks/
-│   └── pipeline.ipynb
-
-
----
 
 ## 🧠 Key Takeaways
 
@@ -116,3 +94,19 @@ Data Analyst | Power BI | Python | Snowflake
 ![Snowflake](https://img.shields.io/badge/Snowflake-Data%20Warehouse-blue)
 ![Power BI](https://img.shields.io/badge/PowerBI-Dashboard-yellow)
 ![SQL](https://img.shields.io/badge/SQL-Data%20Modeling-lightgrey)
+
+## 📂 Project Structure
+
+```text
+mta-bus-ridership-analytics/
+├── README.md
+├── sql/
+│   ├── raw_tables.sql
+│   ├── staging.sql
+│   └── mart.sql
+├── data/
+│   └── sample.csv
+├── powerbi/
+│   └── dashboard.pbix
+└── notebooks/
+    └── pipeline.ipynb
