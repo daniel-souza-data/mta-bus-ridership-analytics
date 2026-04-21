@@ -1,112 +1,169 @@
-# 🚀 MTA Bus Ridership Analytics Platform (Snowflake + Power BI)
+# MTA Bus Ridership Analytics Platform
 
-## 📌 Overview
-This project builds an end-to-end data analytics platform for MTA Bus ridership data using Snowflake and Power BI. It ingests raw transit data, transforms it into structured layers (RAW → STG → MART), and produces analytics-ready datasets used for reporting and decision-making.
-
----
-
-## ❗ Business Problem
-MTA operates hundreds of bus routes across NYC, generating large volumes of ridership data. However, identifying trends such as peak-demand periods, high-performing routes, and payment adoption (OMNY vs. MetroCard) requires structured data pipelines and consistent data modeling.
+**Snowflake + Power BI**
 
 ---
 
-## 💡 Solution
-Designed and implemented a scalable data pipeline in Snowflake:
+## Overview
 
-- Ingest raw CSV data into staging tables
-- Clean and standardize data for consistency
-- Transform data into analytics-ready fact tables
-- Deliver insights through Power BI dashboards
+An end-to-end analytics platform for MTA bus ridership across a targeted Brooklyn-Queens corridor. The pipeline transforms raw transit data into structured, analytics-ready datasets in Snowflake and delivers interactive dashboards in Power BI.
+
+**Scope:** 7 bus routes (B7, B12, B20, B25, B60, B83, Q24) | Jan-Feb 2026 | 237,888 fare transactions | 655 revenue stops
 
 ---
 
-## 🧰 Tech Stack
+## Business Problem
 
-- **Snowflake** – Data warehouse
-- **SQL** – Data transformation and modeling
-- **Power BI** – Data visualization and dashboards
-- **Python** *(optional)* – Data handling / automation
+Transit agencies generate large volumes of operational data, but deriving actionable insights requires structured data modeling and consistent transformation logic. Key questions include:
 
----
-
-## 🏗️ Data Architecture
-
-- **RAW**: Ingested source data (no transformations)
-- **STG**: Cleaned, typed, standardized data
-- **MART**: Aggregated, business-ready datasets
+- When and where does peak demand occur?
+- Which routes drive the most ridership within the corridor?
+- How is OMNY adoption progressing relative to MetroCard?
+- How does ridership shift week over week?
 
 ---
 
-## 📊 Key Insights
+## Solution
 
-- Peak ridership occurs during weekday rush hours
-- Certain routes consistently drive higher demand
-- OMNY adoption is increasing relative to MetroCard
-- Weekend ridership patterns differ significantly from weekdays
+Designed and implemented a layered data platform in Snowflake:
 
----
-
-## 📈 Dashboard Features
-
-Power BI dashboards provide:
-
-- **Executive Overview** – Total ridership, trends, KPIs  
-- **Route Analysis** – Top-performing routes  
-- **Time Analysis** – Hourly and daily patterns  
-- **Payment Analysis** – OMNY vs MetroCard usage  
-
-*(See `/powerbi/dashboard.pbix` for full report)*
+- Scoped and ingested route-level ridership data (Jan-Feb 2026)
+- Integrated geospatial bus stop reference data (2,583 stop-route mappings)
+- Standardized and modeled data using a **RAW > STG > MART** architecture
+- Built analytics-ready fact tables, dimension tables, and report views
+- Delivered interactive dashboards in Power BI
 
 ---
 
-## ⚙️ Data Pipeline
+## Tech Stack
 
-1. Load CSV data into Snowflake (RAW layer)
-2. Transform and clean data (STG layer)
-3. Create aggregated tables (MART layer)
-4. Connect Power BI to MART for reporting
-
----
-
-## 🚀 Future Improvements
-
-- Implement incremental data loading  
-- Add anomaly detection for ridership spikes  
-- Automate pipeline scheduling  
-- Expand dataset coverage  
+| Layer | Technology |
+|-------|------------|
+| Data Warehouse | Snowflake |
+| Data Modeling | SQL |
+| Visualization | Power BI |
+| Notebook | Snowflake Notebooks (Python + SQL) |
 
 ---
 
+## Data Architecture
 
-## 🧠 Key Takeaways
-
-- Built an end-to-end data pipeline using Snowflake  
-- Applied data modeling best practices (layered architecture)  
-- Transformed raw data into business insights  
-- Delivered analytics through Power BI dashboards  
+```
+MTA_BUS (Database)
+|
+|-- RAW (Landing Layer)
+|   |-- BUS_HOURLY_RIDERSHIP_RAW    237,888 rows   Hourly fare transactions by route
+|   |-- BUS_STOPS_RAW                 2,583 rows   GTFS stop-route reference data
+|
+|-- STG (Staging Layer)
+|   |-- STG_BUS_HOURLY_RIDERSHIP    237,888 rows   Cleaned, typed, enriched ridership
+|   |-- STG_BUS_STOPS                 2,583 rows   Normalized stop reference with borough heuristic
+|
+|-- MART (Analytics Layer)
+|   |-- FCT_BUS_ROUTE_DAILY              413 rows   Daily route-level aggregations
+|   |-- FCT_BUS_ROUTE_HOURLY          19,824 rows   Hourly route-level aggregations
+|   |-- DIM_BUS_ROUTE_LOCATION              7 rows   Route centroids (avg lat/lon from revenue stops)
+|   |
+|   |-- RPT_BUS_CORRIDOR_DAILY_SUMMARY      Corridor-level daily rollup (Core vs Support)
+|   |-- RPT_BUS_FARE_CLASS_DAILY             Fare class breakdown by route and day
+|   |-- RPT_BUS_ROUTE_PEAK_HOURS             Average ridership by route and hour
+|   |-- RPT_BUS_ROUTE_WOW_TREND              Week-over-week ridership change by route
+|   |-- V_BUS_ROUTE_MAP                      Route centroids joined to daily ridership
+|   |-- V_BUS_STOP_MAP                       Individual stop pins (655 revenue stops)
+```
 
 ---
 
-## 📬 Contact
+## Key Insights
 
-Daniel Souza  
-Data Analyst | Power BI | Python | Snowflake  
-![Snowflake](https://img.shields.io/badge/Snowflake-Data%20Warehouse-blue)
-![Power BI](https://img.shields.io/badge/PowerBI-Dashboard-yellow)
-![SQL](https://img.shields.io/badge/SQL-Data%20Modeling-lightgrey)
+- Ridership is heavily commuter-driven, with significantly higher weekday demand
+- A small subset of routes drives the majority of corridor usage
+- OMNY accounts for over 95% of transactions, indicating near-complete adoption
+- Demand patterns vary by route, with distinct peak-hour behaviors
+- Spatial analysis shows ridership concentrated along key corridor nodes
 
-## 📂 Project Structure
+---
 
-```text
-mta-bus-ridership-analytics/
-├── README.md
-├── sql/
-│   ├── raw_tables.sql
-│   ├── staging.sql
-│   └── mart.sql
-├── data/
-│   └── sample.csv
-├── powerbi/
-│   └── dashboard.pbix
-└── notebooks/
-    └── pipeline.ipynb
+## Dashboard Features
+
+**Executive Overview**
+- Total ridership and KPI tracking
+- Corridor segmentation (Core vs Support routes)
+- Weekday vs weekend demand patterns
+
+**Route Performance Analysis**
+- Daily ridership trends
+- Route ranking and contribution analysis
+- Transfer behavior insights
+
+**Time Analysis**
+- Hourly demand curves
+- Peak-hour identification
+- Weekday vs weekend comparison
+
+**Spatial Analysis**
+- Route-level map (ridership-weighted centroids)
+- Stop-level network visualization
+- Directional route exploration
+
+---
+
+## Data Pipeline
+
+```
+CSV Files (MTA Open Data)
+    |
+    v
+@BUS_RAW_STAGE (Snowflake Internal Stage)
+    |
+    v
+RAW Layer -- COPY INTO with METADATA$FILENAME tracking
+    |
+    v
+STG Layer -- Type casting, trimming, derived fields (date parts, corridor group, borough)
+    |
+    v
+MART Layer -- Aggregated facts, dimension tables, report views, map-ready datasets
+    |
+    v
+Power BI -- Connected to MART for dashboards and KPI cards
+```
+
+---
+
+## Data Quality Notes
+
+- **Jan 10-15, 2026:** Source data contains zero ridership across all routes for this 6-day period. This is a reporting gap from the MTA source system, not a pipeline error. These dates are flagged and should be filtered in downstream analysis to avoid skewing averages and trends.
+- Stop-level data is used for spatial context only; ridership is modeled at the route level.
+
+---
+
+## Future Improvements
+
+- Implement incremental data loading with change tracking
+- Add anomaly detection for ridership spikes and gaps
+- Automate pipeline scheduling with Snowflake Tasks
+- Expand dataset coverage to additional boroughs and routes
+- Add `IS_DATA_GAP` flag to staging/mart tables for automated gap handling
+
+---
+
+## Project Structure
+
+```
+MTA_Bus_Operations/
+  MTA_Bus.ipynb        Snowflake Notebook - full pipeline (setup, load, transform, visualize)
+  Kill_MTA_Bus.sql     Teardown script
+  README.md            Project documentation
+```
+
+---
+
+## Contact
+
+**Daniel Souza**
+Data Analyst | Power BI | Python | Snowflake
+
+![Snowflake](https://img.shields.io/badge/Snowflake-Data%20Warehouse-29B5E8?logo=snowflake&logoColor=white)
+![Power BI](https://img.shields.io/badge/Power%20BI-Dashboard-F2C811?logo=powerbi&logoColor=black)
+![SQL](https://img.shields.io/badge/SQL-Data%20Modeling-4479A1?logo=postgresql&logoColor=white)
