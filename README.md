@@ -4,6 +4,19 @@
 
 ---
 
+## Dashboard Preview
+### Executive Overview
+![Executive Overview](executive_overview.png)
+
+### Route Performance
+![Route Analysis](route-level_performance_analysis.png)
+
+### Corridor Map
+![Map View](corridor_map_overview.png)
+
+### Stop-Level
+![Route View](stop-level_network_view.png)
+
 ## Overview
 
 An end-to-end analytics platform for MTA bus ridership across a targeted Brooklyn-Queens corridor. The pipeline transforms raw transit data into structured, analytics-ready datasets in Snowflake and delivers interactive dashboards in Power BI.
